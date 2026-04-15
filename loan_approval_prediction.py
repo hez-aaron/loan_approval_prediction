@@ -7,23 +7,22 @@ data = pd.read_csv('LoanApprovalPrediction.csv')
 print(data.head())
 
 # Get the number of columns with string data
-str = (data.dtypes == 'str')
-print('Categorical variables:', len(list(str[str].index)))
+str_data = (data.dtypes == 'str')
+print('Categorical variables:', len(list(str_data[str_data].index)))
 
-data.drop(['Loan_ID'], axis=1, inplace=True) # Loan_ID is not correlated with any of the other columns
+# Loan_ID is not correlated with any of the other columns
+data.drop(['Loan_ID'], axis=1, inplace=True) 
 
-str = (data.dtypes == 'str')
-string_cols = list(str[str].index)
-plt.figure(figsize=(9,8))
-index = 1
-# fig, axs = plt.subplots(3, 3, figsize=(14, 14), dpi=95)
+# Visualize categorical values in using barplot
+str_data = (data.dtypes == 'str')
+string_cols = list(str_data[str_data].index)
+fig, axs = plt.subplots(2, 3, figsize=(9, 6), dpi=95)
 
-for col in string_cols:
-    y = data[col].value_counts()
-    plt.subplot(2,4,index)
+for i , ax in enumerate(axs.flatten()):
+    y = data[string_cols[i]].value_counts()
     plt.xticks(rotation=90)
-    sns.barplot(x=list(y.index), y=y)
-    plt.title(col)
-    index +=1
+    sns.barplot(x=list(y.index), y=y, ax=ax)
+    ax.set_title(string_cols[i])
+
 plt.tight_layout()
 plt.show()
