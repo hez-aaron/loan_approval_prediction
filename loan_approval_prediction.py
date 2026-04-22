@@ -64,9 +64,9 @@ print(data.isna().sum())
 # Split dataset for model training
 X = data.drop(['Loan_Status'], axis=1)
 Y = data['Loan_Status']
-
 X.shape, Y.shape
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.4, random_state=1)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=1)
 print(X_train.shape, X_test.shape, Y_train.shape, Y_test.shape)
 
 knn = KNeighborsClassifier(n_neighbors=3)
@@ -79,13 +79,12 @@ for clf in (rfc, knn, svc, lc):
     pipe = make_pipeline(StandardScaler(), clf)
     pipe.fit(X_train, Y_train)
     Y_pred = pipe.predict(X_train)
-    print('Accuracy score of ', clf.__class__.__name__, '=', 100*metrics.accuracy_score(Y_train, Y_pred))
-
+    print('Accuracy score of', clf.__class__.__name__, '=', 100*metrics.accuracy_score(Y_train, Y_pred))
+print()
 # Making predictions on the testing set
 for clf in (rfc, knn, svc, lc):
     pipe = make_pipeline(StandardScaler(), clf)
     pipe.fit(X_train, Y_train)
     pipe.score(X_test, Y_test)
     Y_pred = pipe.predict(X_test)
-    print('Accuracy score of ', clf.__class__.__name__, '=', 100*metrics.accuracy_score(Y_test, Y_pred))
-
+    print('Accuracy score of', clf.__class__.__name__, '=', 100*metrics.accuracy_score(Y_test, Y_pred))
