@@ -13,7 +13,8 @@ from sklearn.pipeline import make_pipeline
 
 # Get and view data
 data = pd.read_csv('LoanApprovalPrediction.csv')
-print(data.tail())
+print(data.info())
+print(data.head())
 
 def has_string_data():
     return (data.dtypes == 'str')
@@ -21,7 +22,7 @@ def has_string_data():
 def get_string_columns():
     return list(has_string_data()[has_string_data()].index)
 
-print('Categorical variables:', len(get_string_columns())) # Number of columns with categorical values
+print('Categorical variables(string data):', len(get_string_columns()))
 
 data.drop(['Loan_ID'], axis=1, inplace=True) # Loan_ID is not correlated with any of the other columns,so we drop it
 
@@ -60,15 +61,16 @@ for col in data.columns:
     data[col] = data[col].fillna(data[col].mean())
 
 print(data.isna().sum())
+print()
 
 # Split dataset for model training
 X = data.drop(['Loan_Status'], axis=1)
 Y = data['Loan_Status']
-X.shape, Y.shape
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=1)
-print(X_train.shape, X_test.shape, Y_train.shape, Y_test.shape)
-
+print('X_train shape:', X_train.shape, 'X_test shape:', X_test.shape)
+print('Y_train shape:', Y_train.shape, 'X_test shape:', Y_test.shape)
+print()
 knn = KNeighborsClassifier(n_neighbors=3)
 rfc = RandomForestClassifier(n_estimators=7, criterion='entropy', random_state=7)
 svc = SVC()
@@ -80,7 +82,7 @@ for clf in (rfc, knn, svc, lc):
     pipe.fit(X_train, Y_train)
     Y_pred = pipe.predict(X_train)
     print('Accuracy score of', clf.__class__.__name__, '=', 100*metrics.accuracy_score(Y_train, Y_pred))
-print()
+print('Test Score')
 # Making predictions on the testing set
 for clf in (rfc, knn, svc, lc):
     pipe = make_pipeline(StandardScaler(), clf)
