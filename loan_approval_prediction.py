@@ -46,7 +46,7 @@ for col in string_columns:
 
 print('Categorical variables:', len(get_string_columns())) # Check to ensure that there are no string data columns
 
-# Visualize correlations with heatmap
+# Visualize correlations using heatmap
 plt.figure(figsize=(9,6))
 sns.heatmap(data.corr(), cmap='PRGn', fmt='.2f', linewidths=2, annot=True)
 plt.tight_layout()
